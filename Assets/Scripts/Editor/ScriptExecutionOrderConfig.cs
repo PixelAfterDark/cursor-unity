@@ -13,7 +13,12 @@ namespace Cursor.Editor
         // Execution order values (lower = earlier execution)
         private const int SystemsManagerOrder = -100;
         private const int EventSystemOrder = -90;
+        private const int StatsSystemOrder = -80;
+        private const int ObjectPoolManagerOrder = -75;
         private const int GameManagerOrder = -70;
+        private const int EnemyControllerOrder = -60;
+        private const int PlayerControllerOrder = -65;
+        private const int EnemySpawnerOrder = -55;
 
         static ScriptExecutionOrderConfig()
         {
@@ -25,7 +30,12 @@ namespace Cursor.Editor
         {
             SetExecutionOrder<SystemsManager>(SystemsManagerOrder);
             SetExecutionOrder<EventSystem>(EventSystemOrder);
+            SetExecutionOrder<Stats.StatsSystem>(StatsSystemOrder);
+            SetExecutionOrder<Pool.ObjectPoolManager>(ObjectPoolManagerOrder);
             SetExecutionOrder<GameManager>(GameManagerOrder);
+            SetExecutionOrder<Gameplay.PlayerController>(PlayerControllerOrder);
+            SetExecutionOrder<Gameplay.EnemyController>(EnemyControllerOrder);
+            SetExecutionOrder<Gameplay.EnemySpawner>(EnemySpawnerOrder);
         }
 
         private static void SetExecutionOrder<T>(int order) where T : UnityEngine.MonoBehaviour

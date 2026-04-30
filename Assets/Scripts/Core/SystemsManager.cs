@@ -7,20 +7,39 @@ namespace Cursor.Core
     /// Initialized before all other systems via Script Execution Order.
     /// Provides global access to systems: SystemsManager.Instance.StatsSystem etc.
     /// </summary>
+    [DefaultExecutionOrder(-100)]
     public class SystemsManager : Singleton<SystemsManager>
     {
         // --- System References (registered at runtime) ---
-        // These will be populated as we implement each system.
-        // Example: public StatsSystem StatsSystem { get; private set; }
+        public Stats.StatsSystem StatsSystem { get; private set; }
+        public Pool.ObjectPoolManager ObjectPoolManager { get; private set; }
+        public Gameplay.EnemyController EnemyController { get; private set; }
+        public Gameplay.EnemySpawner EnemySpawner { get; private set; }
+        public Gameplay.PlayerController PlayerController { get; private set; }
 
         /// <summary>
         /// Registers a system reference. Called by each system in its Awake/Start.
         /// </summary>
         public void RegisterSystem<T>(T system) where T : class
         {
-            // Future systems will be registered here.
-            // Example:
-            // if (system is StatsSystem stats) StatsSystem = stats;
+            switch (system)
+            {
+                case Stats.StatsSystem stats:
+                    StatsSystem = stats;
+                    break;
+                case Pool.ObjectPoolManager poolManager:
+                    ObjectPoolManager = poolManager;
+                    break;
+                case Gameplay.EnemyController enemyController:
+                    EnemyController = enemyController;
+                    break;
+                case Gameplay.EnemySpawner enemySpawner:
+                    EnemySpawner = enemySpawner;
+                    break;
+                case Gameplay.PlayerController playerController:
+                    PlayerController = playerController;
+                    break;
+            }
         }
 
         protected override void OnAwake()

@@ -8,6 +8,7 @@ namespace Cursor.Core
     /// Manages game state machine (Menu -> Upgrade -> Gameplay -> Summary)
     /// and scene transitions. All state side-effects are emitted via EventSystem.
     /// </summary>
+    [DefaultExecutionOrder(-70)]
     public class GameManager : Singleton<GameManager>
     {
         /// <summary>

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Cursor.Stats;
 
 namespace Cursor.Core
 {
@@ -46,7 +47,7 @@ namespace Cursor.Core
     public struct EnemyKilledEventArgs
     {
         public Vector2 Position;
-        // public EnemyType Type;
+        public EnemyType Type;
     }
 
     /// <summary>

@@ -15,13 +15,22 @@ namespace Cursor.Core
         /// </summary>
         public GameState CurrentState { get; private set; } = GameState.Menu;
 
+        private bool _isTransitioning = false;
+
         // --- State Machine ---
 
         /// <summary>
         /// Transition to a new game state. Emits OnGameStateChanged event.
+        /// Guards against re-entrant calls from within event handlers.
         /// </summary>
         public void ChangeState(GameState newState)
         {
+            if (_isTransitioning)
+            {
+                Debug.LogWarning($"[GameManager] Re-entrant state change attempted during transition to {newState}. Ignored.");
+                return;
+            }
+
             if (CurrentState == newState)
             {
                 Debug.LogWarning($"[GameManager] Attempted to change to same state: {newState}");
@@ -30,6 +39,7 @@ namespace Cursor.Core
 
             GameState previousState = CurrentState;
             CurrentState = newState;
+            _isTransitioning = true;
 
             Debug.Log($"[GameManager] State changed: {previousState} -> {newState}");
 
@@ -37,6 +47,8 @@ namespace Cursor.Core
             {
                 State = newState
             });
+
+            _isTransitioning = false;
         }
 
         // --- Navigation Helpers ---

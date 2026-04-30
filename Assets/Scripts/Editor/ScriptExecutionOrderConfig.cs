@@ -57,7 +57,19 @@ namespace Cursor.Editor
             string[] guids = AssetDatabase.FindAssets($"t:MonoScript {typeof(T).Name}");
             if (guids.Length == 0) return null;
 
-            return AssetDatabase.GUIDToAssetPath(guids[0]);
+            // Find the exact MonoScript matching the target type to avoid
+            // collisions when multiple scripts share the same name.
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                MonoScript monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+                if (monoScript != null && monoScript.GetClass() == typeof(T))
+                {
+                    return path;
+                }
+            }
+
+            return null;
         }
     }
 }

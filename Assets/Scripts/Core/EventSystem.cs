@@ -15,6 +15,7 @@ namespace Cursor.Core
         private interface IEventBus
         {
             void ClearScope(EventScope scope);
+            void ClearAll();
         }
 
         private class EventBus<T> : IEventBus
@@ -32,55 +33,48 @@ namespace Cursor.Core
             }
 
             private readonly List<Subscription> _subscriptions = new List<Subscription>();
-            private readonly object _lock = new object();
+            private int _emitCount = 0;
+            private const int CleanupInterval = 32;
 
             public void Subscribe(Action<T> handler, EventScope scope)
             {
                 if (handler == null) return;
-
-                lock (_lock)
-                {
-                    _subscriptions.Add(new Subscription(handler, scope));
-                }
+                _subscriptions.Add(new Subscription(handler, scope));
             }
 
             public void Unsubscribe(Action<T> handler)
             {
                 if (handler == null) return;
 
-                lock (_lock)
+                for (int i = _subscriptions.Count - 1; i >= 0; i--)
                 {
-                    for (int i = _subscriptions.Count - 1; i >= 0; i--)
+                    if (_subscriptions[i].Handler == handler)
                     {
-                        if (_subscriptions[i].Handler == handler)
-                        {
-                            _subscriptions.RemoveAt(i);
-                        }
+                        _subscriptions.RemoveAt(i);
                     }
                 }
             }
 
             public void Emit(T args)
             {
-                List<Subscription> snapshot;
-                lock (_lock)
-                {
-                    snapshot = new List<Subscription>(_subscriptions);
-                }
+                _emitCount++;
+                bool shouldCleanup = (_emitCount % CleanupInterval) == 0;
 
-                List<Subscription> toRemove = null;
-
-                for (int i = 0; i < snapshot.Count; i++)
+                // Iterate backwards so we can safely remove dead subscriptions inline.
+                // Unity is single-threaded, so no snapshot/lock is needed.
+                for (int i = _subscriptions.Count - 1; i >= 0; i--)
                 {
-                    var sub = snapshot[i];
+                    var sub = _subscriptions[i];
                     if (sub.Handler == null)
-                        continue;
-
-                    // Auto-cleanup: remove delegates targeting destroyed MonoBehaviours
-                    if (sub.Handler.Target is UnityEngine.Object unityObj && unityObj == null)
                     {
-                        toRemove ??= new List<Subscription>();
-                        toRemove.Add(sub);
+                        _subscriptions.RemoveAt(i);
+                        continue;
+                    }
+
+                    // Periodic auto-cleanup: remove delegates targeting destroyed MonoBehaviours
+                    if (shouldCleanup && sub.Handler.Target is UnityEngine.Object unityObj && unityObj == null)
+                    {
+                        _subscriptions.RemoveAt(i);
                         continue;
                     }
 
@@ -93,51 +87,39 @@ namespace Cursor.Core
                         Debug.LogException(ex);
                     }
                 }
-
-                if (toRemove != null)
-                {
-                    lock (_lock)
-                    {
-                        foreach (var sub in toRemove)
-                        {
-                            _subscriptions.Remove(sub);
-                        }
-                    }
-                }
             }
 
             public void ClearScope(EventScope scope)
             {
-                lock (_lock)
+                for (int i = _subscriptions.Count - 1; i >= 0; i--)
                 {
-                    for (int i = _subscriptions.Count - 1; i >= 0; i--)
+                    if (_subscriptions[i].Scope == scope)
                     {
-                        if (_subscriptions[i].Scope == scope)
-                        {
-                            _subscriptions.RemoveAt(i);
-                        }
+                        _subscriptions.RemoveAt(i);
                     }
                 }
+            }
+
+            public void ClearAll()
+            {
+                _subscriptions.Clear();
+                _emitCount = 0;
             }
         }
 
         // --- EventSystem Core ---
 
         private readonly Dictionary<Type, object> _buses = new Dictionary<Type, object>();
-        private readonly object _busesLock = new object();
 
         private EventBus<T> GetBus<T>()
         {
             Type type = typeof(T);
-            lock (_busesLock)
+            if (!_buses.TryGetValue(type, out object bus))
             {
-                if (!_buses.TryGetValue(type, out object bus))
-                {
-                    bus = new EventBus<T>();
-                    _buses[type] = bus;
-                }
-                return (EventBus<T>)bus;
+                bus = new EventBus<T>();
+                _buses[type] = bus;
             }
+            return (EventBus<T>)bus;
         }
 
         // --- Public API ---
@@ -173,12 +155,9 @@ namespace Cursor.Core
         /// </summary>
         public void ClearScope(EventScope scope)
         {
-            lock (_busesLock)
+            foreach (var bus in _buses.Values)
             {
-                foreach (var bus in _buses.Values)
-                {
-                    (bus as IEventBus)?.ClearScope(scope);
-                }
+                (bus as IEventBus)?.ClearScope(scope);
             }
         }
 
@@ -187,10 +166,11 @@ namespace Cursor.Core
         /// </summary>
         public void ClearAll()
         {
-            lock (_busesLock)
+            foreach (var bus in _buses.Values)
             {
-                _buses.Clear();
+                (bus as IEventBus)?.ClearAll();
             }
+            _buses.Clear();
         }
 
         protected override void OnAwake()

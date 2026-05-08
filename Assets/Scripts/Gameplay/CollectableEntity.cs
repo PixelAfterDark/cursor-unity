@@ -3,10 +3,16 @@ using UnityEngine;
 namespace Cursor.Gameplay
 {
     /// <summary>
-    /// Placeholder component for collectable prefabs used by ObjectPoolManager.
-    /// Will be extended with collectable logic (type, value, homing) in future steps.
+    /// Component attached to collectable prefabs. Acts as a bridge between the pooled GameObject
+    /// and the CollectableController's runtime data list.
     /// </summary>
     public class CollectableEntity : MonoBehaviour
     {
+        public SpriteRenderer SpriteRenderer { get; private set; }
+
+        private void Awake()
+        {
+            SpriteRenderer = GetComponent<SpriteRenderer>();
+        }
     }
 }

@@ -16,6 +16,9 @@ namespace Cursor.Core
         public Gameplay.EnemyController EnemyController { get; private set; }
         public Gameplay.EnemySpawner EnemySpawner { get; private set; }
         public Gameplay.PlayerController PlayerController { get; private set; }
+        public Gameplay.CollectableController CollectableController { get; private set; }
+        public Gameplay.CollectableSpawner CollectableSpawner { get; private set; }
+        public Gameplay.DifficultyScaler DifficultyScaler { get; private set; }
 
         /// <summary>
         /// Registers a system reference. Called by each system in its Awake/Start.
@@ -38,6 +41,15 @@ namespace Cursor.Core
                     break;
                 case Gameplay.PlayerController playerController:
                     PlayerController = playerController;
+                    break;
+                case Gameplay.CollectableController collectableController:
+                    CollectableController = collectableController;
+                    break;
+                case Gameplay.CollectableSpawner collectableSpawner:
+                    CollectableSpawner = collectableSpawner;
+                    break;
+                case Gameplay.DifficultyScaler difficultyScaler:
+                    DifficultyScaler = difficultyScaler;
                     break;
             }
         }

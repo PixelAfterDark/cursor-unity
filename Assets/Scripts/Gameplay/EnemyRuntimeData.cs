@@ -16,6 +16,7 @@ namespace Cursor.Gameplay
         public float maxHp;
         public float radius;
         public float dmg;
+        public int collectableCount;
         public Data.EnemyConfigSO config;
         public Enemy enemyRef;
         public bool isActive;

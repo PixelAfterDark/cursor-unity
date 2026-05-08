@@ -70,5 +70,10 @@ namespace Cursor.UI
         {
             GameManager.Instance?.StartSession();
         }
+
+        public void OnMainMenuButtonClicked()
+        {
+            GameManager.Instance?.LoadMainMenu();
+        }
     }
 }

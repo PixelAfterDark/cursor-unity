@@ -16,6 +16,11 @@ namespace Cursor.Core
         /// </summary>
         public GameState CurrentState { get; private set; } = GameState.Menu;
 
+        /// <summary>
+        /// Czas trwania aktualnej sesji (sekundy). Resetowany przy starcie Gameplay.
+        /// </summary>
+        public float SessionTime { get; private set; } = 0f;
+
         private bool _isTransitioning = false;
 
         // --- State Machine ---
@@ -41,6 +46,11 @@ namespace Cursor.Core
             GameState previousState = CurrentState;
             CurrentState = newState;
             _isTransitioning = true;
+
+            if (newState == GameState.Gameplay)
+            {
+                SessionTime = 0f;
+            }
 
             Debug.Log($"[GameManager] State changed: {previousState} -> {newState}");
 
@@ -136,6 +146,14 @@ namespace Cursor.Core
         }
 
         // --- Lifecycle ---
+
+        private void Update()
+        {
+            if (CurrentState == GameState.Gameplay)
+            {
+                SessionTime += Time.deltaTime;
+            }
+        }
 
         protected override void OnAwake()
         {

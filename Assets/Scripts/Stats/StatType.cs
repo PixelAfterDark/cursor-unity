@@ -52,5 +52,12 @@ namespace Cursor.Stats
         Currency_B_Count,
         Currency_C_Count,
         Currency_D_Count,
+
+        // --- Collectable System ---
+        PickupRadius,
+        CollectableCountModifier_A,
+        CollectableCountModifier_B,
+        CollectableCountModifier_C,
+        CollectableCountModifier_D,
     }
 }

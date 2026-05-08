@@ -48,6 +48,8 @@ namespace Cursor.Core
     {
         public Vector2 Position;
         public EnemyType Type;
+        public Data.EnemySubtype Subtype;
+        public int CollectableCount;
     }
 
     /// <summary>
@@ -57,7 +59,7 @@ namespace Cursor.Core
     public struct CollectablePickedUpEventArgs
     {
         public int Amount;
-        // public CollectableType Type;
+        public Gameplay.CollectableType Type;
     }
 
     /// <summary>

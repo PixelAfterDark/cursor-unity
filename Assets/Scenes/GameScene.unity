@@ -255,6 +255,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173765011}
   m_CullTransparentMesh: 1
+--- !u!1 &228370745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 228370748}
+  - component: {fileID: 228370747}
+  - component: {fileID: 228370746}
+  m_Layer: 0
+  m_Name: CollectableSystems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &228370746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228370745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0648251f426f7144295ac9bd4998d914, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.Gameplay.CollectableController
+  collectDistance: 2
+  debounceTime: 0.1
+  homingSpeed: 15
+  typeColors:
+  - {r: 0.3, g: 0.5, b: 1, a: 1}
+  - {r: 0.3, g: 1, b: 0.3, a: 1}
+  - {r: 1, g: 0.3, b: 0.3, a: 1}
+  - {r: 0.8, g: 0.3, b: 1, a: 1}
+--- !u!114 &228370747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228370745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f2275464a182240b8a9defc6526b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.Gameplay.CollectableSpawner
+  spawnScatter: 0.5
+--- !u!4 &228370748
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228370745}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.15268, y: 1.13271, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &291899975
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Cursor.Gameplay.EnemySpawner
   allEnemyConfigs:
   - {fileID: 11400000, guid: d79307c8fd6dc5d4e8ff7fe1cb549c82, type: 2}
+  - {fileID: 11400000, guid: b93139ea595d81441b480605bb1148ed, type: 2}
   spawnMargin: 1
   centerOffset: 2
 --- !u!4 &291899977
@@ -582,6 +649,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 587271348}
+  - component: {fileID: 900000000}
   m_Layer: 5
   m_Name: UpgradePanel
   m_TagString: Untagged
@@ -727,7 +795,7 @@ MonoBehaviour:
     prefab: {fileID: 3613217846682879995, guid: 27e62dbe3d6886d4cb53d6f6a1547972, type: 3}
     prewarmCount: 20
   - key: 1
-    prefab: {fileID: 3613217846682879995, guid: 27e62dbe3d6886d4cb53d6f6a1547972, type: 3}
+    prefab: {fileID: 8141603599561883410, guid: 8d81bc0f56b2ef14ab69391159da1545, type: 3}
     prewarmCount: 50
 --- !u!4 &645255109
 Transform:
@@ -1092,6 +1160,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1095123938}
   m_CullTransparentMesh: 1
+--- !u!1 &1165841335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1165841337}
+  - component: {fileID: 1165841336}
+  m_Layer: 0
+  m_Name: DifficultyScaler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1165841336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165841335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c59651e8e0e43b04a915444d184ee3d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.Gameplay.DifficultyScaler
+  difficultyTickInterval: 30
+  scaleDivisor: 120
+  hpCap: 10
+  speedCap: 2
+  dmgCap: 5
+--- !u!4 &1165841337
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165841335}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.15268, y: 1.13271, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1196058777
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,6 +1504,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1365927889}
+  - component: {fileID: 900000001}
   m_Layer: 5
   m_Name: GameplayPanel
   m_TagString: Untagged
@@ -1424,6 +1542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1413090702}
   - component: {fileID: 1413090701}
+  - component: {fileID: 900000003}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -1736,6 +1855,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1830339426}
+  - component: {fileID: 900000002}
   m_Layer: 5
   m_Name: Summary Panel
   m_TagString: Untagged
@@ -2004,6 +2124,71 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &900000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587271347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ff8f26d68d41f09465a827795489ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.UI.UpgradePanel
+  currencyAText: {fileID: 0}
+  currencyBText: {fileID: 0}
+  currencyCText: {fileID: 0}
+  currencyDText: {fileID: 0}
+--- !u!114 &900000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365927888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee937e6c8554120a451b45ec0f5ffbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.UI.GameplayPanel
+  hpFillImage: {fileID: 0}
+  hpBackgroundImage: {fileID: 0}
+  timerText: {fileID: 0}
+  currencyAText: {fileID: 0}
+  currencyBText: {fileID: 0}
+  currencyCText: {fileID: 0}
+  currencyDText: {fileID: 0}
+--- !u!114 &900000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830339425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c2c4770ee44d53888bcc3f382d89a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.UI.SummaryPanel
+  timeText: {fileID: 0}
+  killsText: {fileID: 0}
+  currencyAText: {fileID: 0}
+  currencyBText: {fileID: 0}
+  currencyCText: {fileID: 0}
+  currencyDText: {fileID: 0}
+--- !u!114 &900000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413090700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: effe8ca6a0254c6aaf57bf912dd95abf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.Stats.SessionStatsCollector
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2017,3 +2202,5 @@ SceneRoots:
   - {fileID: 1339414951}
   - {fileID: 1234567891}
   - {fileID: 1413090702}
+  - {fileID: 228370748}
+  - {fileID: 1165841337}

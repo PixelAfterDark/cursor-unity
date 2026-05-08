@@ -122,7 +122,12 @@ namespace Cursor.Gameplay
             var baseStats = statsSystem.GetEnemyStats(config.enemyType);
             float speed = Random.Range(baseStats.speedMin, baseStats.speedMax) * config.speedMultiplier;
             float rotSpeed = Random.Range(baseStats.rotSpeedMin, baseStats.rotSpeedMax);
-            float maxHp = baseStats.baseHp * config.hpMultiplier;
+
+            var difficultyScaler = Core.SystemsManager.Instance?.DifficultyScaler;
+            float hpMult = difficultyScaler?.HpMultiplier ?? 1f;
+            float dmgMult = difficultyScaler?.DmgMultiplier ?? 1f;
+
+            float maxHp = baseStats.baseHp * config.hpMultiplier * hpMult;
 
             // Pull from pool
             Enemy enemy = poolManager.Get<Enemy>(Pool.PoolKey.Enemy);
@@ -143,7 +148,8 @@ namespace Cursor.Gameplay
                 maxHp = maxHp,
                 currentHp = maxHp,
                 radius = baseStats.radius,
-                dmg = baseStats.baseDmg * config.dmgMultiplier,
+                dmg = baseStats.baseDmg * config.dmgMultiplier * dmgMult,
+                collectableCount = config.collectableCount,
                 config = config,
                 enemyRef = enemy,
                 isActive = true,
@@ -213,7 +219,9 @@ namespace Cursor.Gameplay
                 Core.EventSystem.Instance.Emit(new Core.EnemyKilledEventArgs
                 {
                     Position = enemy.position,
-                    Type = enemy.config.enemyType
+                    Type = enemy.config.enemyType,
+                    Subtype = enemy.config.enemySubtype,
+                    CollectableCount = enemy.collectableCount
                 });
                 UnregisterEnemy(index);
             }

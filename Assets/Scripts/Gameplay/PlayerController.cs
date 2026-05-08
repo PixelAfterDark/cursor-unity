@@ -27,6 +27,11 @@ namespace Cursor.Gameplay
         public float CurrentHp => _currentHp;
         public bool IsDead => _isDead;
 
+        /// <summary>
+        /// Emitted when HP changes. Parameters: currentHp, maxHp.
+        /// </summary>
+        public event System.Action<float, float> OnHpChanged;
+
         // =========================================================
         // LIFECYCLE
         // =========================================================
@@ -92,6 +97,7 @@ namespace Cursor.Gameplay
             float maxHp = stats != null ? stats.GetStat(Stats.StatType.PlayerMaxHp) : 100f;
             _currentHp = maxHp;
             _isDead = false;
+            OnHpChanged?.Invoke(_currentHp, maxHp);
         }
 
         /// <summary>
@@ -106,6 +112,9 @@ namespace Cursor.Gameplay
             float actualDmg = Mathf.Max(0f, dmg - def);
 
             _currentHp -= actualDmg;
+
+            float maxHp = stats != null ? stats.GetStat(Stats.StatType.PlayerMaxHp) : 100f;
+            OnHpChanged?.Invoke(_currentHp, maxHp);
 
             if (_currentHp <= 0f)
             {
@@ -125,6 +134,7 @@ namespace Cursor.Gameplay
             var stats = Core.SystemsManager.Instance?.StatsSystem;
             float maxHp = stats != null ? stats.GetStat(Stats.StatType.PlayerMaxHp) : 100f;
             _currentHp = Mathf.Min(_currentHp + amount, maxHp);
+            OnHpChanged?.Invoke(_currentHp, maxHp);
         }
 
         // =========================================================

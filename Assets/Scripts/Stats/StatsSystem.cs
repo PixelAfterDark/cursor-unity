@@ -97,6 +97,13 @@ namespace Cursor.Stats
             _stats[StatType.Currency_C_Count] = 0f;
             _stats[StatType.Currency_D_Count] = 0f;
 
+            // --- Collectable System ---
+            _stats[StatType.PickupRadius] = 0.5f;
+            _stats[StatType.CollectableCountModifier_A] = 1f;
+            _stats[StatType.CollectableCountModifier_B] = 1f;
+            _stats[StatType.CollectableCountModifier_C] = 1f;
+            _stats[StatType.CollectableCountModifier_D] = 1f;
+
             // --- Enemy base stats (GDD Section 6) ---
             // Type A — Blue: small, fast, weak, drops Shard
             _enemyStats[EnemyType.A] = new EnemyStats

@@ -24,7 +24,7 @@ namespace Cursor.Data
         public float dmgMultiplier = 1f;
         [Tooltip("Multiplier applied to base speed from StatsSystem")]
         public float speedMultiplier = 1f;
-        [Tooltip("Multiplier applied to collectable drop count from StatsSystem")]
-        public float dropMultiplier = 1f;
+        [Tooltip("Base number of collectables dropped when this enemy dies.")]
+        public int collectableCount = 1;
     }
 }

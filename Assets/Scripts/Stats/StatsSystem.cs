@@ -239,13 +239,57 @@ namespace Cursor.Stats
 
         /// <summary>
         /// Resets session-only stats. Called by GameManager when a new gameplay session starts.
-        /// Currently a placeholder — playerCurrentHp lives in PlayerController,
-        /// but this method can be extended for future session-bound stats.
+        /// Currencies are persistent across sessions and are NOT reset here.
+        /// Player current HP is managed by PlayerController and resets on Gameplay state entry.
         /// </summary>
         public void ResetSessionStats()
         {
             // Session-bound resets happen here when needed.
             // Example: any temporary buffs or per-session modifiers would be cleared.
+        }
+
+        // =========================================================
+        // SAVE / LOAD from SaveData (Stage 6+)
+        // =========================================================
+
+        /// <summary>
+        /// Restores persistent data from a SaveData object.
+        /// Starts from defaults and overlays saved currencies.
+        /// </summary>
+        public void LoadFrom(Core.SaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Start from a clean slate so missing fields fall back to defaults.
+            InitializeDefaults();
+
+            foreach (var entry in saveData.currencies)
+            {
+                if (entry == null) continue;
+                if (TryParseCurrencyKey(entry.key, out StatType statType))
+                {
+                    _stats[statType] = entry.value;
+                }
+            }
+
+            // Notify listeners so UI refreshes.
+            OnStatChanged?.Invoke(StatType.Currency_A_Count, GetStat(StatType.Currency_A_Count));
+            OnStatChanged?.Invoke(StatType.Currency_B_Count, GetStat(StatType.Currency_B_Count));
+            OnStatChanged?.Invoke(StatType.Currency_C_Count, GetStat(StatType.Currency_C_Count));
+            OnStatChanged?.Invoke(StatType.Currency_D_Count, GetStat(StatType.Currency_D_Count));
+        }
+
+        private bool TryParseCurrencyKey(string key, out StatType statType)
+        {
+            statType = default;
+            switch (key)
+            {
+                case "currency_A": statType = StatType.Currency_A_Count; return true;
+                case "currency_B": statType = StatType.Currency_B_Count; return true;
+                case "currency_C": statType = StatType.Currency_C_Count; return true;
+                case "currency_D": statType = StatType.Currency_D_Count; return true;
+            }
+            return false;
         }
 
         // =========================================================

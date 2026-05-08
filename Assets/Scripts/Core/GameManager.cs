@@ -50,6 +50,12 @@ namespace Cursor.Core
             if (newState == GameState.Gameplay)
             {
                 SessionTime = 0f;
+                SystemsManager.Instance?.StatsSystem?.ResetSessionStats();
+            }
+
+            if (newState == GameState.Summary)
+            {
+                SaveSystem.Instance?.Save();
             }
 
             Debug.Log($"[GameManager] State changed: {previousState} -> {newState}");
@@ -66,28 +72,37 @@ namespace Cursor.Core
 
         /// <summary>
         /// Load MainMenu scene and set state to Menu.
+        /// Saves current progress before leaving.
         /// </summary>
         public void LoadMainMenu()
         {
+            SaveSystem.Instance?.Save();
             SceneManager.LoadScene("MainMenu");
             ChangeState(GameState.Menu);
         }
 
         /// <summary>
-        /// Start a new game: load GameScene. State will auto-transition to Upgrade.
+        /// Start a new game: delete save, reset stats, load GameScene.
+        /// State will auto-transition to Upgrade.
         /// </summary>
         public void StartNewGame()
         {
+            SaveSystem.Instance?.DeleteSave();
+            SystemsManager.Instance?.StatsSystem?.InitializeDefaults();
             SceneManager.LoadScene("GameScene");
             // State -> Upgrade is handled in OnSceneLoaded when GameScene finishes loading
         }
 
         /// <summary>
-        /// Continue a saved game: load GameScene. Save loading will be added later.
+        /// Continue a saved game: load save data, then load GameScene.
         /// </summary>
         public void ContinueGame()
         {
-            // TODO: Load save data into StatsSystem / UpgradeSystem when SaveSystem is implemented
+            var saveData = SaveSystem.Instance?.Load();
+            if (saveData != null)
+            {
+                SystemsManager.Instance?.StatsSystem?.LoadFrom(saveData);
+            }
             SceneManager.LoadScene("GameScene");
             // State -> Upgrade is handled in OnSceneLoaded when GameScene finishes loading
         }

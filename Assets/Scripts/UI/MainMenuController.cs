@@ -27,6 +27,7 @@ namespace Cursor.UI
             {
                 bool hasSave = Core.SaveSystem.Instance?.SaveExists() ?? false;
                 continueButton.interactable = hasSave;
+                continueButton.gameObject.SetActive(hasSave);
             }
         }
 

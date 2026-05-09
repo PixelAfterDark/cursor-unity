@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3b2704d46d5d24da1d03722bd5b9d9, type: 3}
+  m_Name: Upgrade3
+  m_EditorClassIdentifier: Assembly-CSharp::Cursor.Upgrades.UpgradeNodeSO
+  <UpgradeId>k__BackingField: upgrade3
+  <UpgradeName>k__BackingField: Upgrade 3
+  <Description>k__BackingField: the first upgrade
+  <MaxLevel>k__BackingField: 5
+  <TargetStat>k__BackingField: 2
+  <ValuesPerLevel>k__BackingField:
+  - 10
+  - 20
+  - 30
+  - 40
+  - 50
+  <CostsPerLevel>k__BackingField: 0100000002000000030000000400000005000000
+  <CostCurrency>k__BackingField: 29
+  <UnlocksOnLevel1>k__BackingField: []
+  <IsRoot>k__BackingField: 0
+  <Icon>k__BackingField: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}

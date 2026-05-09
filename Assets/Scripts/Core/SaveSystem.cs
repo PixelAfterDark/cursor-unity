@@ -7,7 +7,7 @@ namespace Cursor.Core
 {
     /// <summary>
     /// Handles persistence of game progress via JSON file in persistentDataPath.
-    /// Stage 6 implementation: saves currencies. Stage 7 will add stats and upgrades.
+    /// Saves currencies, persistent stats, and upgrade states (level + unlocked).
     /// </summary>
     public class SaveSystem : Singleton<SaveSystem>
     {
@@ -27,9 +27,26 @@ namespace Cursor.Core
                 saveData.currencies.Add(new CurrencyEntry { key = "currency_B", value = (int)statsSystem.GetStat(StatType.Currency_B_Count) });
                 saveData.currencies.Add(new CurrencyEntry { key = "currency_C", value = (int)statsSystem.GetStat(StatType.Currency_C_Count) });
                 saveData.currencies.Add(new CurrencyEntry { key = "currency_D", value = (int)statsSystem.GetStat(StatType.Currency_D_Count) });
+
+                // Save all persistent stats (excluding currencies, which are stored separately)
+                foreach (StatType statType in System.Enum.GetValues(typeof(StatType)))
+                {
+                    if (statType == StatType.Currency_A_Count ||
+                        statType == StatType.Currency_B_Count ||
+                        statType == StatType.Currency_C_Count ||
+                        statType == StatType.Currency_D_Count)
+                    {
+                        continue;
+                    }
+                    saveData.stats.Add(new StatSaveEntry { key = statType.ToString(), value = statsSystem.GetStat(statType) });
+                }
             }
 
-            // stats and upgrades are intentionally left empty for Stage 7.
+            var upgradeSystem = SystemsManager.Instance?.UpgradeSystem;
+            if (upgradeSystem != null)
+            {
+                saveData.upgrades = upgradeSystem.GetSaveData();
+            }
 
             try
             {

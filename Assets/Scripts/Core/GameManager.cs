@@ -22,6 +22,7 @@ namespace Cursor.Core
         public float SessionTime { get; private set; } = 0f;
 
         private bool _isTransitioning = false;
+        private SaveData _pendingSaveData;
 
         // --- State Machine ---
 
@@ -53,7 +54,7 @@ namespace Cursor.Core
                 SystemsManager.Instance?.StatsSystem?.ResetSessionStats();
             }
 
-            if (newState == GameState.Summary)
+            if (newState == GameState.Summary || newState == GameState.Upgrade)
             {
                 SaveSystem.Instance?.Save();
             }
@@ -89,19 +90,22 @@ namespace Cursor.Core
         {
             SaveSystem.Instance?.DeleteSave();
             SystemsManager.Instance?.StatsSystem?.InitializeDefaults();
+            SystemsManager.Instance?.UpgradeSystem?.ResetToDefaults();
+            _pendingSaveData = null;
             SceneManager.LoadScene("GameScene");
             // State -> Upgrade is handled in OnSceneLoaded when GameScene finishes loading
         }
 
         /// <summary>
         /// Continue a saved game: load save data, then load GameScene.
+        /// UpgradeSystem load is deferred to OnSceneLoaded because the system lives in GameScene.
         /// </summary>
         public void ContinueGame()
         {
-            var saveData = SaveSystem.Instance?.Load();
-            if (saveData != null)
+            _pendingSaveData = SaveSystem.Instance?.Load();
+            if (_pendingSaveData != null)
             {
-                SystemsManager.Instance?.StatsSystem?.LoadFrom(saveData);
+                SystemsManager.Instance?.StatsSystem?.LoadFrom(_pendingSaveData);
             }
             SceneManager.LoadScene("GameScene");
             // State -> Upgrade is handled in OnSceneLoaded when GameScene finishes loading
@@ -137,6 +141,15 @@ namespace Cursor.Core
         {
             if (scene.name == "GameScene" && CurrentState != GameState.Upgrade)
             {
+                // Apply pending upgrade save if continuing a game
+                if (_pendingSaveData != null)
+                {
+                    SystemsManager.Instance?.UpgradeSystem?.LoadFrom(_pendingSaveData);
+                    _pendingSaveData = null;
+                }
+
+                UI.UpgradeTreeView.Instance?.RefreshAll();
+
                 // GameScene always starts in Upgrade view (player upgrades before session)
                 ChangeState(GameState.Upgrade);
             }

@@ -1,0 +1,19 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.2/staging' branch; Version is '6000.2.12f1 (e89d5df0e333) revision 15244637'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-ggrel" at "2026-05-09T09:31:39.7652699Z"
+OS: 'Windows 11  (10.0.26200) 64bit Professional' Language: 'pl' Physical Memory: 32539 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+Date: 2026-05-09T09:31:39Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.2.12f1\Editor\Unity.exe
+-projectPath
+C:\GameProject\cursor-unity
+-batchmode
+-nographics
+-quit
+-logFile
+C:\GameProject\cursor-unity\build_log.txt
+Successfully changed project path to: C:\GameProject\cursor-unity
+C:/GameProject/cursor-unity
+Exiting without the bug reporter. Application will terminate with return code 1

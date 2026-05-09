@@ -233,6 +233,21 @@ namespace Cursor.Stats
             _enemyStats[type] = stats;
         }
 
+        /// <summary>
+        /// Attempts to spend currency. Returns false if balance is insufficient.
+        /// </summary>
+        public bool SpendCurrency(StatType currencyStat, int amount)
+        {
+            if (amount <= 0) return true;
+            float current = GetStat(currencyStat);
+            if (current < amount) return false;
+
+            float newValue = current - amount;
+            _stats[currencyStat] = newValue;
+            OnStatChanged?.Invoke(currencyStat, newValue);
+            return true;
+        }
+
         // =========================================================
         // SESSION MANAGEMENT
         // =========================================================
@@ -266,7 +281,16 @@ namespace Cursor.Stats
             foreach (var entry in saveData.currencies)
             {
                 if (entry == null) continue;
-                if (TryParseCurrencyKey(entry.key, out StatType statType))
+                if (TryParseCurrencyKey(entry.key, out StatType currencyStat))
+                {
+                    _stats[currencyStat] = entry.value;
+                }
+            }
+
+            foreach (var entry in saveData.stats)
+            {
+                if (entry == null) continue;
+                if (System.Enum.TryParse<StatType>(entry.key, out StatType statType))
                 {
                     _stats[statType] = entry.value;
                 }

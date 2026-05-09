@@ -19,6 +19,7 @@ namespace Cursor.Core
         public Gameplay.CollectableController CollectableController { get; private set; }
         public Gameplay.CollectableSpawner CollectableSpawner { get; private set; }
         public Gameplay.DifficultyScaler DifficultyScaler { get; private set; }
+        public Upgrades.UpgradeSystem UpgradeSystem { get; private set; }
 
         /// <summary>
         /// Registers a system reference. Called by each system in its Awake/Start.
@@ -50,6 +51,9 @@ namespace Cursor.Core
                     break;
                 case Gameplay.DifficultyScaler difficultyScaler:
                     DifficultyScaler = difficultyScaler;
+                    break;
+                case Upgrades.UpgradeSystem upgradeSystem:
+                    UpgradeSystem = upgradeSystem;
                     break;
             }
         }

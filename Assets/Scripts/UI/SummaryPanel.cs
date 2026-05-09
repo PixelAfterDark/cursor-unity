@@ -31,6 +31,12 @@ namespace Cursor.UI
         private void OnEnable()
         {
             this.Subscribe<GameStateChangedEventArgs>(OnGameStateChanged);
+
+            // If panel is activated after the state-change event already fired, refresh manually.
+            if (Core.GameManager.Instance != null && Core.GameManager.Instance.CurrentState == Core.GameState.Summary)
+            {
+                Refresh();
+            }
         }
 
         private void OnDisable()

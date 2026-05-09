@@ -48,22 +48,22 @@ namespace Cursor.UI
 
             if (startGameButton != null)
             {
-                startGameButton.onClick.RemoveAllListeners();
+                startGameButton.onClick = new Button.ButtonClickedEvent();
                 startGameButton.onClick.AddListener(OnStartGameClicked);
             }
             if (optionsButton != null)
             {
-                optionsButton.onClick.RemoveAllListeners();
+                optionsButton.onClick = new Button.ButtonClickedEvent();
                 optionsButton.onClick.AddListener(OnOptionsClicked);
             }
             if (creditsButton != null)
             {
-                creditsButton.onClick.RemoveAllListeners();
+                creditsButton.onClick = new Button.ButtonClickedEvent();
                 creditsButton.onClick.AddListener(OnCreditsClicked);
             }
             if (quitButton != null)
             {
-                quitButton.onClick.RemoveAllListeners();
+                quitButton.onClick = new Button.ButtonClickedEvent();
                 quitButton.onClick.AddListener(OnQuitClicked);
             }
         }
@@ -81,7 +81,7 @@ namespace Cursor.UI
                 continueButton = existing.GetComponent<Button>();
                 if (continueButton != null)
                 {
-                    continueButton.onClick.RemoveAllListeners();
+                    continueButton.onClick = new Button.ButtonClickedEvent();
                     continueButton.onClick.AddListener(OnContinueClicked);
                 }
                 return;
@@ -104,7 +104,7 @@ namespace Cursor.UI
             continueButton = go.GetComponent<Button>();
             if (continueButton != null)
             {
-                continueButton.onClick.RemoveAllListeners();
+                continueButton.onClick = new Button.ButtonClickedEvent();
                 continueButton.onClick.AddListener(OnContinueClicked);
             }
         }
